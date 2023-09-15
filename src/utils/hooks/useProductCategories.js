@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../constants";
 import { useLatestAPI } from "./useLatestAPI";
 
-export function useProductCategories() {
+export function useProductCategories(page = 0) {
   const { ref: apiRef, isLoading: isApiMetadataLoading } = useLatestAPI();
   const [productCategories, setProductCategories] = useState(() => ({
     data: {},

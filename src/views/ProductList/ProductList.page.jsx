@@ -9,24 +9,25 @@ import Grid from "../../components/Grid/Grid.component";
 export default function ProductList() {
   const categories = useProductCategories();
   const [sidebar, categoriesSelected] = BuildSidebar(categories.data);
-  const [isLoading, setLoading] = useState(false);
-  const allProducts = useProductList();
+  const [productPage, setProductPage] = useState(0);
+
+  const allProducts = useProductList(productPage);
   const products = filterProducts(allProducts.data, categoriesSelected);
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const [actualProductPage, GridProduct] = Grid({
+    data: products,
+    size: allProducts.data.total_pages,
+  });
   useEffect(() => {
-    async function mockRequest() {
-      await delay(2000);
-      setLoading(false);
-    }
-    setLoading(true);
-    mockRequest();
-  }, [categoriesSelected]);
+    window.scrollTo(0, 0);
+    setProductPage(actualProductPage + 1);
+  }, [actualProductPage]);
   return (
     <>
       {sidebar}
       <Content>
         <Title>This is the Product List Page</Title>
-        {isLoading ? <LoadingSpinner /> : <Grid data={products} />}
+        {allProducts.isLoading ? <LoadingSpinner /> : <GridProduct />}
       </Content>
     </>
   );

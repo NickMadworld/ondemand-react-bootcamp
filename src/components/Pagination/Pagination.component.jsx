@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, ButtonBox, ButtonContainer } from "../../Global.styles";
 
-export default function Pagination({ size = 10 }) {
+export default function Pagination(size = 10) {
   const [actualPage, setActualPage] = useState(0);
   const [begin, setBegin] = useState(0);
   const [end, setEnd] = useState(4);
@@ -42,14 +42,16 @@ export default function Pagination({ size = 10 }) {
     }
     if (actualPage > 0) setActualPage(actualPage - 1);
   }
-  const pagination = (
-    <ButtonBox>
-      <ButtonContainer>{options}</ButtonContainer>
-      <ButtonContainer>
-        <Button onClick={prev}> Prev </Button>
-        <Button onClick={next}> Next </Button>
-      </ButtonContainer>
-    </ButtonBox>
-  );
-  return [actualPage, pagination];
+  const PaginationComponent = () => {
+    return (
+      <ButtonBox>
+        <ButtonContainer>{options}</ButtonContainer>
+        <ButtonContainer>
+          <Button onClick={prev}> Prev </Button>
+          <Button onClick={next}> Next </Button>
+        </ButtonContainer>
+      </ButtonBox>
+    );
+  };
+  return [actualPage, PaginationComponent];
 }

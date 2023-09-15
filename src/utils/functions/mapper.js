@@ -1,4 +1,5 @@
 export function productCategoryToCard(data) {
+  if (Object.keys(data).length === 0) return [];
   return data.results.map((image) => {
     return {
       id: image.id,
@@ -11,6 +12,7 @@ export function productCategoryToCard(data) {
 }
 
 export function featuredProductsToCard(data) {
+  if (Object.keys(data).length === 0) return [];
   return data.results.map((image) => {
     return {
       id: image.id,
@@ -42,5 +44,6 @@ export function filterProducts(data, categoriesSelected) {
 }
 
 export function imageFromProductToCard(data) {
+  if (Object.keys(data).length === 0) return [];
   return data;
 }

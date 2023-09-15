@@ -28,7 +28,7 @@ export default function Header() {
             <MenuLink to="/">{NAME_STORE}</MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink to="/">HOME</MenuLink>
+            <MenuLink to="/home">HOME</MenuLink>
           </MenuItem>
           <MenuItem>
             <MenuLink to="/info">INFO</MenuLink>

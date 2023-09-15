@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner.component";
 import { useProductCategories } from "../../utils/hooks/useProductCategories";
 import { useProductList } from "../../utils/hooks/useProductList";
@@ -12,34 +12,41 @@ import {
 } from "../../utils/functions/mapper";
 
 export default function MainView() {
-  const navigate = useNavigate();
-  const productCategories = useProductCategories();
-  const productList = useProductList();
+  const [pageCategory, setPageCategory] = useState(0);
+  const [pageProduct, setPageProduct] = useState(0);
+  const productCategories = useProductCategories(pageCategory);
+  const productList = useProductList(pageProduct);
+
+  const [actualCategoryPage, GridCategory] = Grid({
+    data: productCategoryToCard(productCategories.data),
+    size: productCategories.data.total_pages,
+  });
+
+  const [actualProductPage, GridProduct] = Grid({
+    data: featuredProductsToCard(productList.data),
+    size: productList.data.total_pages,
+  });
+
+  useEffect(() => {
+    setPageCategory(actualCategoryPage);
+  }, [actualCategoryPage]);
+
+  useEffect(() => {
+    setPageProduct(actualProductPage + 1);
+  }, [actualProductPage]);
+
   return (
     <>
       <Title> Product Categories - Grid</Title>
-      {productCategories.isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <Grid
-          data={productCategoryToCard(productCategories.data)}
-          update={useProductCategories}
-        />
-      )}
+      {productCategories.isLoading ? <LoadingSpinner /> : <GridCategory />}
 
       <Title> Featured Products - Grid</Title>
-      {productList.isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <Grid data={featuredProductsToCard(productList.data)} />
-      )}
+      {productList.isLoading ? <LoadingSpinner /> : <GridProduct />}
 
       <ButtonBox>
         <ButtonContainer>
-          <OutlineButton
-            onClick={() => navigate("/products", { replace: true })}
-          >
-            View All Products
+          <OutlineButton>
+            <Link to="/products">View All Products</Link>
           </OutlineButton>
         </ButtonContainer>
       </ButtonBox>

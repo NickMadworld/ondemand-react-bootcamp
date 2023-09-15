@@ -1,16 +1,10 @@
 import Card from "../Card/Card.component";
-import React, { useEffect } from "react";
+import React from "react";
 import { Cards } from "../Card/Card.style";
 import Pagination from "../Pagination/Pagination.component";
-export default function Grid({ data }) {
-  const [actualPage, pagination] = Pagination(10);
-  useEffect(() => {
-    const controller = new AbortController();
-    return () => {
-      controller.abort();
-    };
-  }, [actualPage]);
-  return (
+export default function Grid({ data, size = 0 }) {
+  const [actualPage, PaginationComponent] = Pagination(size);
+  const GridCompomnent = () => (
     <>
       <Cards>
         {data.map((image) => (
@@ -23,7 +17,8 @@ export default function Grid({ data }) {
           />
         ))}
       </Cards>
-      {pagination}
+      {size > 0 && <PaginationComponent />}
     </>
   );
+  return [actualPage, GridCompomnent];
 }

@@ -4,7 +4,7 @@ import { Title } from "../../Global.styles";
 export default function About() {
   return (
     <AboutContainer>
-      <Title>About Page</Title>
+      <Title onFocus="true">About Page</Title>
     </AboutContainer>
   );
 }
