@@ -1,4 +1,5 @@
 export function productCategoryToCard(data) {
+  if (Object.keys(data).length === 0) return [];
   return data.results.map((image) => {
     return {
       id: image.id,
@@ -11,6 +12,7 @@ export function productCategoryToCard(data) {
 }
 
 export function featuredProductsToCard(data) {
+  if (Object.keys(data).length === 0) return [];
   return data.results.map((image) => {
     return {
       id: image.id,
@@ -23,6 +25,7 @@ export function featuredProductsToCard(data) {
 }
 
 export function filterProducts(data, categoriesSelected) {
+  if (Object.keys(data).length === 0) return [];
   return data.results
     .filter(
       (product) =>
@@ -38,4 +41,9 @@ export function filterProducts(data, categoriesSelected) {
         image: product.data.mainimage.url,
       };
     });
+}
+
+export function imageFromProductToCard(data) {
+  if (Object.keys(data).length === 0) return [];
+  return data;
 }

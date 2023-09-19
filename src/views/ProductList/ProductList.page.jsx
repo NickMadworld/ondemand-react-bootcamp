@@ -2,30 +2,32 @@ import React, { useState, useEffect } from "react";
 import { Content, Title } from "./ProductList.style";
 import { BuildSidebar } from "../../components/Sidebar/Sidebar.component";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner.component";
-import allProducts from "../../utils/mock/products.json";
 import { filterProducts } from "../../utils/functions/mapper";
-import categories from "../../utils/mock/product-categories.json";
-
+import { useProductCategories } from "../../utils/hooks/useProductCategories";
+import { useProductList } from "../../utils/hooks/useProductList";
 import Grid from "../../components/Grid/Grid.component";
 export default function ProductList() {
-  const [sidebar, categoriesSelected] = BuildSidebar(categories);
-  const [isLoading, setLoading] = useState(false);
-  const products = filterProducts(allProducts, categoriesSelected);
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const categories = useProductCategories();
+  const [sidebar, categoriesSelected] = BuildSidebar(categories.data);
+  const [productPage, setProductPage] = useState(0);
+
+  const allProducts = useProductList(productPage);
+  const products = filterProducts(allProducts.data, categoriesSelected);
+
+  const [actualProductPage, GridProduct] = Grid({
+    data: products,
+    size: allProducts.data.total_pages,
+  });
   useEffect(() => {
-    async function mockRequest() {
-      await delay(2000); // Mock fetch request time
-      setLoading(false);
-    }
-    setLoading(true);
-    mockRequest();
-  }, [categoriesSelected]);
+    window.scrollTo(0, 0);
+    setProductPage(actualProductPage + 1);
+  }, [actualProductPage]);
   return (
     <>
       {sidebar}
       <Content>
         <Title>This is the Product List Page</Title>
-        {isLoading ? <LoadingSpinner /> : <Grid data={products} />}
+        {allProducts.isLoading ? <LoadingSpinner /> : <GridProduct />}
       </Content>
     </>
   );

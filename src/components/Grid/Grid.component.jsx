@@ -1,9 +1,10 @@
-import React from "react";
 import Card from "../Card/Card.component";
+import React from "react";
 import { Cards } from "../Card/Card.style";
-import { Button, ButtonBox, ButtonContainer } from "../../Global.styles";
-export default function Grid({ data }) {
-  return (
+import Pagination from "../Pagination/Pagination.component";
+export default function Grid({ data, size = 0 }) {
+  const [actualPage, PaginationComponent] = Pagination(size);
+  const GridCompomnent = () => (
     <>
       <Cards>
         {data.map((image) => (
@@ -16,18 +17,8 @@ export default function Grid({ data }) {
           />
         ))}
       </Cards>
-      <ButtonBox>
-        <ButtonContainer>
-          <Button className="active"> 1 </Button>
-          <Button> 2 </Button>
-          <Button> 3 </Button>
-          <Button> 4 </Button>
-        </ButtonContainer>
-        <ButtonContainer>
-          <Button> Prev </Button>
-          <Button> Next </Button>
-        </ButtonContainer>
-      </ButtonBox>
+      {size > 0 && <PaginationComponent />}
     </>
   );
+  return [actualPage, GridCompomnent];
 }

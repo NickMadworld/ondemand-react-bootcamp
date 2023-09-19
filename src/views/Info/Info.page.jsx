@@ -4,7 +4,7 @@ import { Title } from "../../Global.styles";
 export default function Info() {
   return (
     <InfoContainer>
-      <Title>Info Page</Title>
+      <Title onFocus="true">Info Page</Title>
     </InfoContainer>
   );
 }

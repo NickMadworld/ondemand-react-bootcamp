@@ -1,10 +1,8 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import mockData1 from "../../utils/mock/featured_banners.json";
-import mockData2 from "../../utils/mock/product-categories.json";
-import mockData3 from "../../utils/mock/featured_products.json";
-
-import Slider from "../../components/Slider/Slider.component";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner.component";
+import { useProductCategories } from "../../utils/hooks/useProductCategories";
+import { useProductList } from "../../utils/hooks/useProductList";
 import Grid from "../../components/Grid/Grid.component";
 import { Title } from "./Home.style";
 import { OutlineButton, ButtonBox, ButtonContainer } from "../../Global.styles";
@@ -14,21 +12,41 @@ import {
 } from "../../utils/functions/mapper";
 
 export default function MainView() {
-  const navigate = useNavigate();
+  const [pageCategory, setPageCategory] = useState(0);
+  const [pageProduct, setPageProduct] = useState(0);
+  const productCategories = useProductCategories(pageCategory);
+  const productList = useProductList(pageProduct);
+
+  const [actualCategoryPage, GridCategory] = Grid({
+    data: productCategoryToCard(productCategories.data),
+    size: productCategories.data.total_pages,
+  });
+
+  const [actualProductPage, GridProduct] = Grid({
+    data: featuredProductsToCard(productList.data),
+    size: productList.data.total_pages,
+  });
+
+  useEffect(() => {
+    setPageCategory(actualCategoryPage);
+  }, [actualCategoryPage]);
+
+  useEffect(() => {
+    setPageProduct(actualProductPage + 1);
+  }, [actualProductPage]);
+
   return (
     <>
-      <Title> Featured banners - Slider</Title>
-      <Slider data={mockData1} />
       <Title> Product Categories - Grid</Title>
-      <Grid data={productCategoryToCard(mockData2)} />
+      {productCategories.isLoading ? <LoadingSpinner /> : <GridCategory />}
+
       <Title> Featured Products - Grid</Title>
-      <Grid data={featuredProductsToCard(mockData3)} />
+      {productList.isLoading ? <LoadingSpinner /> : <GridProduct />}
+
       <ButtonBox>
         <ButtonContainer>
-          <OutlineButton
-            onClick={() => navigate("/product", { replace: true })}
-          >
-            View All Products
+          <OutlineButton>
+            <Link to="/products">View All Products</Link>
           </OutlineButton>
         </ButtonContainer>
       </ButtonBox>

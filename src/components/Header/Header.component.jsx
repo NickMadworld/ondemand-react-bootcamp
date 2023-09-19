@@ -9,8 +9,13 @@ import {
   NavbarContainer,
 } from "./Header.style";
 import { NAME_STORE } from "../../utils/constants";
-
+import { useNavigate } from "react-router-dom";
 export default function Header() {
+  const navigate = useNavigate();
+  const handleChange = (event) => {
+    let path = event.target.value;
+    navigate(`/search/${path}`, { replace: true });
+  };
   return (
     <Nav>
       <link
@@ -23,7 +28,7 @@ export default function Header() {
             <MenuLink to="/">{NAME_STORE}</MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink to="/">HOME</MenuLink>
+            <MenuLink to="/home">HOME</MenuLink>
           </MenuItem>
           <MenuItem>
             <MenuLink to="/info">INFO</MenuLink>
@@ -35,7 +40,7 @@ export default function Header() {
             <Icon></Icon>
           </MenuItem>
           <MenuItem>
-            <Input />
+            <Input onChange={handleChange} />
           </MenuItem>
         </Menu>
       </NavbarContainer>
